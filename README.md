@@ -1,10 +1,22 @@
-# Train CIFAR10 with PyTorch
+# Pytorch Baseline
 
-I'm playing with [PyTorch](http://pytorch.org/) on the CIFAR10 dataset.
+Original : https://github.com/kuangliu/pytorch-cifar by kuangliu.
 
 ## Prerequisites
 - Python 3.6+
 - PyTorch 1.0+
+
+## Log and checkpoint
+Add logger and checkpoint.
+Log and checkpoint files will be saved into each directory.
+(./log/[cur_time] && ./checkpoint/[cur_time])
+
+## Learning rate adjustment
+You can adjust learning rate with manual method or auto method.
+Train with auto scheduler with `python3 main.py --scheduler`
+or you can use a manual way with adjust_learning_rate().
+
+With `python3 main.py --help`, you will get more information.
 
 ## Accuracy
 | Model             | Acc.        |
@@ -20,10 +32,3 @@ I'm playing with [PyTorch](http://pytorch.org/) on the CIFAR10 dataset.
 | [PreActResNet18](https://arxiv.org/abs/1603.05027)    | 95.11%      |
 | [DPN92](https://arxiv.org/abs/1707.01629)             | 95.16%      |
 
-## Learning rate adjustment
-I manually change the `lr` during training:
-- `0.1` for epoch `[0,150)`
-- `0.01` for epoch `[150,250)`
-- `0.001` for epoch `[250,350)`
-
-Resume the training with `python main.py --resume --lr=0.01`
