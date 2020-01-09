@@ -141,7 +141,13 @@ def train(epoch):
         optimizer.zero_grad()
         outputs = net(inputs)
         loss = criterion(outputs, targets)
-        loss.backward()
+
+        if args.amp:
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()
+        else:
+             loss.backward()
+
         optimizer.step()
 
         train_loss += loss.item()
@@ -194,7 +200,7 @@ def test(epoch):
     #     best_acc = acc
 
     logger.write(False, epoch, batch_idx, test_loss/(batch_idx+1), 100.*correct/total)
-
+    return test_loss
 
 # manually adjust learning rate
 def adjust_learning_rate(optimizer, epoch, args):
@@ -213,6 +219,6 @@ def adjust_learning_rate(optimizer, epoch, args):
 for epoch in range(start_epoch, start_epoch+100):
     # adjust_learning_rate(optimizer, epoch, args)
     train(epoch)
-    test(epoch)
+    test_loss = test(epoch)
     if args.scheduler:
         scheduler.step(float(test_loss))
